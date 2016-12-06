@@ -6,7 +6,7 @@ import org.molgenis.data.settings.DefaultSettingsEntityType;
 import org.molgenis.util.RegexUtils;
 import org.springframework.stereotype.Component;
 
-import static org.molgenis.AttributeType.*;
+import static org.molgenis.data.meta.AttributeType.*;
 
 @Component
 public class IdCardIndexerDbSettings extends DefaultSettingsEntity implements IdCardIndexerSettings

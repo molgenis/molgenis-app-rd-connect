@@ -1,6 +1,8 @@
 package org.molgenis.data.idcard;
 
 import org.molgenis.data.*;
+import org.molgenis.data.aggregation.AggregateQuery;
+import org.molgenis.data.aggregation.AggregateResult;
 import org.molgenis.data.elasticsearch.ElasticsearchService;
 import org.molgenis.data.elasticsearch.ElasticsearchService.IndexingMode;
 import org.molgenis.data.idcard.client.IdCardClient;
