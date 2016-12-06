@@ -1,60 +1,22 @@
 package org.molgenis.data.idcard.client;
 
-import org.molgenis.data.Entity;
+import org.molgenis.data.idcard.model.IdCardBiobank;
+import org.molgenis.data.idcard.model.IdCardRegistry;
 
 /**
  * ID-Cards: http://rd-connect.eu/platform/biobanks/id-cards-linking-up-rare-disease-research-across-the-world/
  */
 public interface IdCardClient
 {
-	/**
-	 * Return all biobanks from ID-Cards as entities
-	 *
-	 * @return
-	 */
-	Iterable<Entity> getIdCardBiobanks();
+	Iterable<IdCardBiobank> getIdCardBiobanks();
 
-	/**
-	 * Return all biobanks from ID-Cards as entities, throws an exception if the request took longer than the given
-	 * timeout.
-	 *
-	 * @param timeout request timeout in ms
-	 * @return
-	 */
-	Iterable<Entity> getIdCardBiobanks(long timeout);
+	Iterable<IdCardBiobank> getIdCardBiobanks(long timeout);
 
-	/**
-	 * Return a biobank by id from ID-Cards as entity
-	 *
-	 * @param id
-	 * @return
-	 */
-	Entity getIdCardBiobank(String id);
+	Iterable<IdCardRegistry> getIdCardRegistries();
 
-	/**
-	 * Return a biobank by id from ID-Cards as entity, throws an exception if the request took longer than the given
-	 * timeout.
-	 *
-	 * @param id
-	 * @param timeout request timeout in ms
-	 * @return
-	 */
-	Entity getIdCardBiobank(String id, long timeout);
+	Iterable<IdCardRegistry> getIdCardRegistries(long timeout);
 
-	/**
-	 * Return biobanks by ids from ID-Cards as entities
-	 *
-	 * @param ids
-	 * @return
-	 */
-	Iterable<Entity> getIdCardBiobanks(Iterable<String> ids);
+	IdCardBiobank getIdCardBiobank(String id);
 
-	/**
-	 * Return biobanks by ids from ID-Cards as entities, throws an exception if the request took longer than the given
-	 * timeout.
-	 *
-	 * @param ids
-	 * @return
-	 */
-	Iterable<Entity> getIdCardBiobanks(Iterable<String> ids, long timeout);
+	IdCardRegistry getIdCardRegistry(String id);
 }

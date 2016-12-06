@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IdCardBiobankFactory extends AbstractSystemEntityFactory<IdCardBiobank, IdCardBiobankMetaData, Integer>
+public class IdCardBiobankFactory extends AbstractSystemEntityFactory<IdCardBiobank, IdCardBiobankMetadata, Integer>
 {
 	@Autowired
-	IdCardBiobankFactory(IdCardBiobankMetaData idCardBiobankMetaData, EntityPopulator entityPopulator)
+	IdCardBiobankFactory(IdCardBiobankMetadata idCardBiobankMetadata, EntityPopulator entityPopulator)
 	{
-		super(IdCardBiobank.class, idCardBiobankMetaData, entityPopulator);
+		super(IdCardBiobank.class, idCardBiobankMetadata, entityPopulator);
 	}
 }

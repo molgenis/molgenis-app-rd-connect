@@ -4,9 +4,9 @@ import org.molgenis.data.Entity;
 import org.molgenis.data.elasticsearch.ElasticsearchService;
 import org.molgenis.data.elasticsearch.ElasticsearchService.IndexingMode;
 import org.molgenis.data.idcard.client.IdCardClient;
-import org.molgenis.data.idcard.model.IdCardBiobank;
-import org.molgenis.data.idcard.model.IdCardBiobankFactory;
-import org.molgenis.data.idcard.model.IdCardBiobankMetadata;
+import org.molgenis.data.idcard.model.IdCardRegistry;
+import org.molgenis.data.idcard.model.IdCardRegistryFactory;
+import org.molgenis.data.idcard.model.IdCardRegistryMetadata;
 import org.molgenis.data.idcard.settings.IdCardIndexerSettings;
 import org.molgenis.data.meta.model.EntityType;
 import org.slf4j.Logger;
@@ -18,39 +18,39 @@ import java.util.Iterator;
 import static java.util.Objects.requireNonNull;
 
 @org.springframework.stereotype.Repository
-public class IdCardBiobankRepository extends IdCardBiobankOrRegistryRepository
+public class IdCardRegistryRepository extends IdCardBiobankOrRegistryRepository
 {
-	private static final Logger LOG = LoggerFactory.getLogger(IdCardBiobankRepository.class);
+	private static final Logger LOG = LoggerFactory.getLogger(IdCardRegistryRepository.class);
 
-	private final IdCardBiobankMetadata idCardBiobankMetadata;
+	private final IdCardRegistryMetadata idCardRegistryMetadata;
 	private final IdCardClient idCardClient;
 	private final ElasticsearchService elasticsearchService;
 	private final IdCardIndexerSettings idCardIndexerSettings;
-	private final IdCardBiobankFactory idCardBiobankFactory;
+	private final IdCardRegistryFactory idCardRegistryFactory;
 
 	@Autowired
-	public IdCardBiobankRepository(IdCardBiobankMetadata idCardBiobankMetadata, IdCardClient idCardClient,
-			ElasticsearchService elasticsearchService, IdCardIndexerSettings idCardIndexerSettings,
-			IdCardBiobankFactory idCardBiobankFactory)
+	public IdCardRegistryRepository(IdCardRegistryMetadata idCardRegistryMetadata,
+			IdCardRegistryFactory idCardRegistryFactory, IdCardClient idCardClient,
+			ElasticsearchService elasticsearchService, IdCardIndexerSettings idCardIndexerSettings)
 	{
 		super(elasticsearchService);
-		this.idCardBiobankMetadata = idCardBiobankMetadata;
+		this.idCardRegistryMetadata = requireNonNull(idCardRegistryMetadata);
+		this.idCardRegistryFactory = requireNonNull(idCardRegistryFactory);
 		this.idCardClient = requireNonNull(idCardClient);
 		this.elasticsearchService = requireNonNull(elasticsearchService);
 		this.idCardIndexerSettings = requireNonNull(idCardIndexerSettings);
-		this.idCardBiobankFactory = requireNonNull(idCardBiobankFactory);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Iterator<Entity> iterator()
 	{
-		return (Iterator<Entity>) ((Iterator<?>) idCardClient.getIdCardBiobanks().iterator());
+		return (Iterator<Entity>) ((Iterator<?>) idCardClient.getIdCardRegistries().iterator());
 	}
 
 	public EntityType getEntityType()
 	{
-		return idCardBiobankMetadata;
+		return idCardRegistryMetadata;
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class IdCardBiobankRepository extends IdCardBiobankOrRegistryRepository
 	{
 		try
 		{
-			return idCardClient.getIdCardBiobank(id.toString());
+			return idCardClient.getIdCardRegistry(id.toString());
 		}
 		catch (RuntimeException e)
 		{
@@ -71,7 +71,7 @@ public class IdCardBiobankRepository extends IdCardBiobankOrRegistryRepository
 	{
 		LOG.trace("Indexing ID-Card biobanks ...");
 		Iterable<? extends Entity> entities = idCardClient
-				.getIdCardBiobanks(idCardIndexerSettings.getIndexRebuildTimeout());
+				.getIdCardRegistries(idCardIndexerSettings.getIndexRebuildTimeout());
 
 		EntityType entityType = getEntityType();
 		if (!elasticsearchService.hasMapping(entityType))
@@ -82,10 +82,10 @@ public class IdCardBiobankRepository extends IdCardBiobankOrRegistryRepository
 		LOG.debug("Indexed ID-Card biobanks");
 	}
 
-	private IdCardBiobank createErrorIdCardBiobank(Object id)
+	private IdCardRegistry createErrorIdCardBiobank(Object id)
 	{
-		IdCardBiobank idCardBiobank = idCardBiobankFactory.create(Integer.valueOf(id.toString()));
-		idCardBiobank.setName("Error loading data");
-		return idCardBiobank;
+		IdCardRegistry idCardRegistry = idCardRegistryFactory.create(Integer.valueOf(id.toString()));
+		idCardRegistry.setName("Error loading data");
+		return idCardRegistry;
 	}
 }

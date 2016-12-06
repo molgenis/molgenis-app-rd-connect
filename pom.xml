@@ -9,7 +9,7 @@
     </parent>
     <groupId>org.molgenis</groupId>
     <artifactId>molgenis-rd-connect</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <!-- More Project Information -->
@@ -34,7 +34,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.12</slf4j.version>
         <logback.version>1.1.3</logback.version>
-
         <spring.version>4.1.8.RELEASE</spring.version>
         <spring.security.version>4.0.3.RELEASE</spring.security.version>
         <hibernate.validator.version>4.2.0.Final</hibernate.validator.version>

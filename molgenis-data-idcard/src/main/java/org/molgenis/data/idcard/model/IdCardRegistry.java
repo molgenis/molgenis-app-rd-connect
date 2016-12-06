@@ -5,19 +5,19 @@ import org.molgenis.data.meta.model.EntityType;
 
 import static org.molgenis.data.idcard.model.IdCardBiobankOrRegistryMetadata.ORGANIZATION_ID;
 
-public class IdCardBiobank extends IdCardBiobankOrRegistry
+public class IdCardRegistry extends IdCardBiobankOrRegistry
 {
-	public IdCardBiobank(Entity entity)
+	public IdCardRegistry(Entity entity)
 	{
 		super(entity);
 	}
 
-	public IdCardBiobank(EntityType entityType)
+	public IdCardRegistry(EntityType entityType)
 	{
 		super(entityType);
 	}
 
-	public IdCardBiobank(Integer identifier, EntityType entityType)
+	public IdCardRegistry(Integer identifier, EntityType entityType)
 	{
 		super(entityType);
 		set(ORGANIZATION_ID, identifier);

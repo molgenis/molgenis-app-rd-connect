@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static java.util.Objects.requireNonNull;
 import static org.molgenis.data.idcard.indexer.IdCardIndexerController.URI;
-import static org.molgenis.data.idcard.model.IdCardBiobankMetaData.ID_CARD_BIOBANK;
+import static org.molgenis.data.idcard.model.IdCardBiobankMetadata.ID_CARD_BIOBANK;
 
 @Controller
 @RequestMapping(URI)
