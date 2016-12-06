@@ -1,9 +1,7 @@
 package org.molgenis.data.idcard;
 
-import org.molgenis.data.Entity;
 import org.molgenis.data.idcard.indexer.IdCardIndexerService;
 import org.molgenis.data.idcard.settings.IdCardIndexerSettings;
-import org.molgenis.data.settings.SettingsEntityListener;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,19 +32,15 @@ public class IdCardBootstrapper implements ApplicationListener<ContextRefreshedE
 	private void bootstrap()
 	{
 		LOG.info("Bootstrapping RD-Connect application ...");
-		idCardIndexerSettings.addListener(new SettingsEntityListener()
+		idCardIndexerSettings.addListener(entity ->
 		{
-			@Override
-			public void postUpdate(Entity entity)
+			try
 			{
-				try
-				{
-					idCardIndexerService.updateIndexerScheduler(false);
-				}
-				catch (SchedulerException e)
-				{
-					throw new RuntimeException(e);
-				}
+				idCardIndexerService.updateIndexerScheduler(false);
+			}
+			catch (SchedulerException e)
+			{
+				throw new RuntimeException(e);
 			}
 		});
 

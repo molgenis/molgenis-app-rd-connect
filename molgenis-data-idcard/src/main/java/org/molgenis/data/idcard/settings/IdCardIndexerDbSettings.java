@@ -25,9 +25,11 @@ public class IdCardIndexerDbSettings extends DefaultSettingsEntity implements Id
 	{
 		private static final String API_BASE_URI = "apiBaseUri";
 		private static final String API_TIMEOUT = "apiTimeout";
-		private static final String BIOBANK_RESOURCE = "biobankResource";
+		private static final String ORGANIZATION_RESOURCE = "organizationResource";
 		private static final String BIOBANK_COLLECTIONS_RESOURCE = "biobankCollResource";
 		private static final String BIOBANK_COLLECTIONS_SELECTION_RESOURCE = "biobankCollSelResource";
+		private static final String REGISTRY_COLLECTIONS_RESOURCE = "registryCollResource";
+		private static final String REGISTRY_COLLECTIONS_SELECTION_RESOURCE = "registryCollSelResource";
 		private static final String BIOBANK_INDEXING_ENABLED = "biobankIndexingEnabled";
 		private static final String BIOBANK_INDEXING_TIMEOUT = "biobankIndexingTimeout";
 		private static final String NOTIFICATION_EMAIL = "notificationEmail";
@@ -35,10 +37,13 @@ public class IdCardIndexerDbSettings extends DefaultSettingsEntity implements Id
 		private static final String BIOBANK_INDEXING_FREQUENCY = "biobankIndexingFrequency";
 		private static final String DEFAULT_API_BASE_URI = "http://catalogue.rd-connect.eu/api/jsonws/BiBBoxCommonServices-portlet.logapi";
 		private static final long DEFAULT_API_TIMEOUT = 5000L;
-		private static final String DEFAULT_BIOBANK_RESOURCE = "regbb/organization-id";
-		private static final String DEFAULT_BIOBANK_COLLECTIONS_RESOURCE = "regbbs";
+		private static final String DEFAULT_ORGANIZATION_RESOURCE = "regbb/organization-id";
+		private static final String DEFAULT_BIOBANK_COLLECTIONS_RESOURCE = "bbs";
 		private static final String DEFAULT_BIOBANK_COLLECTIONS_SELECTION_RESOURCE =
 				DEFAULT_BIOBANK_COLLECTIONS_RESOURCE + "/data";
+		private static final String DEFAULT_REGISTRY_COLLECTIONS_RESOURCE = "regs";
+		private static final String DEFAULT_REGISTRY_COLLECTIONS_SELECTION_RESOURCE =
+				DEFAULT_REGISTRY_COLLECTIONS_RESOURCE + "/data";
 		private static final boolean DEFAULT_BIOBANK_INDEXING_ENABLED = false;
 		private static final long DEFAULT_BIOBANK_INDEXING_TIMEOUT = 60000L;
 		private static final String DEFAULT_BIOBANK_INDEXING_FREQUENCY = "0 4 * * * ?";
@@ -58,13 +63,22 @@ public class IdCardIndexerDbSettings extends DefaultSettingsEntity implements Id
 					.setDefaultValue(DEFAULT_API_BASE_URI);
 			addAttribute(API_TIMEOUT).setDataType(LONG).setLabel("API timeout")
 					.setDefaultValue(Long.toString(DEFAULT_API_TIMEOUT));
-			addAttribute(BIOBANK_RESOURCE).setDataType(STRING).setLabel("Biobank resource")
-					.setDefaultValue(DEFAULT_BIOBANK_RESOURCE);
+
+			addAttribute(ORGANIZATION_RESOURCE).setDataType(STRING).setLabel("Organization resource")
+					.setDefaultValue(DEFAULT_ORGANIZATION_RESOURCE);
+
 			addAttribute(BIOBANK_COLLECTIONS_RESOURCE).setDataType(STRING).setLabel("Biobank collection resource")
 					.setDefaultValue(DEFAULT_BIOBANK_COLLECTIONS_RESOURCE);
 			addAttribute(BIOBANK_COLLECTIONS_SELECTION_RESOURCE).setDataType(STRING)
 					.setLabel("Biobank collection filtered resource")
 					.setDefaultValue(DEFAULT_BIOBANK_COLLECTIONS_SELECTION_RESOURCE);
+
+			addAttribute(REGISTRY_COLLECTIONS_RESOURCE).setDataType(STRING).setLabel("Registry collection resource")
+					.setDefaultValue(DEFAULT_REGISTRY_COLLECTIONS_RESOURCE);
+			addAttribute(REGISTRY_COLLECTIONS_SELECTION_RESOURCE).setDataType(STRING)
+					.setLabel("Registry collection filtered resource")
+					.setDefaultValue(DEFAULT_REGISTRY_COLLECTIONS_SELECTION_RESOURCE);
+
 			addAttribute(BIOBANK_INDEXING_ENABLED).setDataType(BOOL).setLabel("Biobank indexing enabled")
 					.setDefaultValue(Boolean.toString(DEFAULT_BIOBANK_INDEXING_ENABLED)).setNillable(false);
 			addAttribute(BIOBANK_INDEXING_TIMEOUT).setDataType(LONG).setLabel("Biobank indexing timeout")
@@ -106,15 +120,13 @@ public class IdCardIndexerDbSettings extends DefaultSettingsEntity implements Id
 	}
 
 	@Override
-	public String getBiobankResource()
-	{
-		return getString(Meta.BIOBANK_RESOURCE);
+	public String getOrganisationResource() {
+		return getString(Meta.ORGANIZATION_RESOURCE);
 	}
 
 	@Override
-	public void setBiobankResource(String biobankResource)
-	{
-		set(Meta.BIOBANK_RESOURCE, biobankResource);
+	public void setOrganisationResource(String registryResource) {
+		set(Meta.ORGANIZATION_RESOURCE, registryResource);
 	}
 
 	@Override
@@ -139,6 +151,30 @@ public class IdCardIndexerDbSettings extends DefaultSettingsEntity implements Id
 	public void setBiobankCollectionSelectionResource(String biobankCollectionSelectionResource)
 	{
 		set(Meta.BIOBANK_COLLECTIONS_SELECTION_RESOURCE, biobankCollectionSelectionResource);
+	}
+
+	@Override
+	public String getRegistryCollectionResource()
+	{
+		return getString(Meta.REGISTRY_COLLECTIONS_RESOURCE);
+	}
+
+	@Override
+	public void setRegistryCollectionResource(String biobankCollectionResource)
+	{
+		set(Meta.REGISTRY_COLLECTIONS_RESOURCE, biobankCollectionResource);
+	}
+
+	@Override
+	public String getRegistryCollectionSelectionResource()
+	{
+		return getString(Meta.REGISTRY_COLLECTIONS_SELECTION_RESOURCE);
+	}
+
+	@Override
+	public void setRegistryCollectionSelectionResource(String biobankCollectionSelectionResource)
+	{
+		set(Meta.REGISTRY_COLLECTIONS_SELECTION_RESOURCE, biobankCollectionSelectionResource);
 	}
 
 	@Override

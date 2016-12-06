@@ -12,9 +12,9 @@ public interface IdCardIndexerSettings
 
 	void setApiTimeout(long timeout);
 
-	String getBiobankResource();
+	String getOrganisationResource();
 
-	void setBiobankResource(String idCardBiobankResource);
+	void setOrganisationResource(String registryResource);
 
 	String getBiobankCollectionResource();
 
@@ -23,6 +23,14 @@ public interface IdCardIndexerSettings
 	String getBiobankCollectionSelectionResource();
 
 	void setBiobankCollectionSelectionResource(String biobankCollectionSelectionResource);
+
+	String getRegistryCollectionResource();
+
+	void setRegistryCollectionResource(String registryCollectionResource);
+
+	String getRegistryCollectionSelectionResource();
+
+	void setRegistryCollectionSelectionResource(String registryCollectionSelectionResource);
 
 	boolean getBiobankIndexingEnabled();
 

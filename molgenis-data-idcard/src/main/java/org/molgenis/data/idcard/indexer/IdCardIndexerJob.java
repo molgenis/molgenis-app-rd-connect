@@ -2,6 +2,7 @@ package org.molgenis.data.idcard.indexer;
 
 import org.molgenis.data.DataService;
 import org.molgenis.data.idcard.IdCardBiobankRepository;
+import org.molgenis.data.idcard.IdCardRegistryRepository;
 import org.molgenis.data.idcard.model.IdCardIndexingEvent;
 import org.molgenis.data.idcard.model.IdCardIndexingEventFactory;
 import org.molgenis.data.idcard.model.IdCardIndexingEventStatus;
@@ -33,6 +34,9 @@ public class IdCardIndexerJob implements Job
 	// Autowire by constructor not possible for Job classes
 	@Autowired
 	private IdCardBiobankRepository idCardBiobankRepository;
+
+	@Autowired
+	private IdCardRegistryRepository idCardRegistryRepository;
 
 	@Autowired
 	private IdCardIndexerSettings idCardIndexerSettings;
@@ -68,7 +72,11 @@ public class IdCardIndexerJob implements Job
 		RuntimeException runtimeException = null;
 		try
 		{
-			RunAsSystemProxy.runAsSystem(() -> idCardBiobankRepository.rebuildIndex());
+			RunAsSystemProxy.runAsSystem(() ->
+			{
+				idCardBiobankRepository.rebuildIndex();
+				idCardRegistryRepository.rebuildIndex();
+			});
 			idCardIndexingEvent.setStatus(IdCardIndexingEventStatus.SUCCESS);
 			idCardIndexingEvent
 					.setMessage(String.format("Index rebuild [%s]", username != null ? username : JOB_USERNAME_SYSTEM));
