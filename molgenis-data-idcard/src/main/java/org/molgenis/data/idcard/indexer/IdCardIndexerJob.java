@@ -15,11 +15,8 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 
 import static org.molgenis.data.idcard.model.IdCardIndexingEventMetaData.ID_CARD_INDEXING_EVENT;
 
@@ -45,7 +42,7 @@ public class IdCardIndexerJob implements Job
 	private DataService dataService;
 
 	@Autowired
-	private JavaMailSender mailSender;
+	private MailSender mailSender;
 
 	@Autowired
 	private IdCardIndexingEventFactory idCardIndexingEventFactory;
@@ -103,23 +100,13 @@ public class IdCardIndexerJob implements Job
 		}
 	}
 
-	private MimeMessage createMessage(IdCardIndexingEvent idCardIndexingEvent)
+	private SimpleMailMessage createMessage(IdCardIndexingEvent idCardIndexingEvent)
 	{
-		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper;
-		try
-		{
-			// TODO add server to message
-			helper = new MimeMessageHelper(message, false);
-			helper.setTo(idCardIndexerSettings.getNotificationEmail());
-			helper.setReplyTo("no-reply@molgenis.org");
-			helper.setSubject("ID-Card index rebuild failed");
-			helper.setText("ID-Card index rebuild failed with message:\n" + idCardIndexingEvent.getMessage());
-		}
-		catch (MessagingException e)
-		{
-			throw new RuntimeException(e);
-		}
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(idCardIndexerSettings.getNotificationEmail());
+		message.setReplyTo("no-reply@molgenis.org");
+		message.setSubject("ID-Card index rebuild failed");
+		message.setText("ID-Card index rebuild failed with message:\n" + idCardIndexingEvent.getMessage());
 		return message;
 	}
 }
