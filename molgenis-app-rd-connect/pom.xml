@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.molgenis</groupId>
         <artifactId>molgenis-rd-connect</artifactId>
-        <version>3.0.0-RD-CONNECT-SNAPSHOT</version>
+        <version>3.0.0-RD-CONNECT</version>
     </parent>
     <artifactId>molgenis-app-rd-connect</artifactId>
     <packaging>war</packaging>
