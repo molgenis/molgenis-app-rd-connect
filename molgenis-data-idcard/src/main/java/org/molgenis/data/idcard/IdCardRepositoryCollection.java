@@ -1,13 +1,9 @@
 package org.molgenis.data.idcard;
 
 import com.google.common.collect.Maps;
-import org.molgenis.data.Entity;
-import org.molgenis.data.MolgenisDataException;
-import org.molgenis.data.Repository;
-import org.molgenis.data.RepositoryCollectionCapability;
+import org.molgenis.data.*;
 import org.molgenis.data.meta.model.EntityType;
 import org.molgenis.data.support.AbstractRepositoryCollection;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
@@ -20,6 +16,9 @@ import static java.util.Objects.requireNonNull;
 import static org.molgenis.data.RepositoryCollectionCapability.WRITABLE;
 import static org.molgenis.data.idcard.model.IdCardBiobankMetadata.ID_CARD_BIOBANK;
 import static org.molgenis.data.idcard.model.IdCardRegistryMetadata.ID_CARD_REGISTRY;
+import static org.molgenis.data.meta.MetaUtils.getEntityTypeFetch;
+import static org.molgenis.data.meta.model.EntityTypeMetadata.BACKEND;
+import static org.molgenis.data.meta.model.EntityTypeMetadata.ENTITY_TYPE_META_DATA;
 
 @Component
 public class IdCardRepositoryCollection extends AbstractRepositoryCollection
@@ -30,12 +29,15 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	private final IdCardRegistryRepository idCardRegistryRepository;
 	private final Map<String, Repository<Entity>> repositories;
 
-	@Autowired
+	private final DataService dataService;
+
 	public IdCardRepositoryCollection(IdCardBiobankRepository idCardBiobankRepository,
-			IdCardRegistryRepository idCardRegistryRepository)
+			IdCardRegistryRepository idCardRegistryRepository, DataService dataService)
 	{
 		this.idCardBiobankRepository = requireNonNull(idCardBiobankRepository);
 		this.idCardRegistryRepository = requireNonNull(idCardRegistryRepository);
+		this.dataService = requireNonNull(dataService);
+
 		this.repositories = Maps.newLinkedHashMap();
 		repositories.put(ID_CARD_BIOBANK, idCardBiobankRepository);
 		repositories.put(ID_CARD_REGISTRY, idCardRegistryRepository);
@@ -56,7 +58,7 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	@Override
 	public Repository<Entity> createRepository(EntityType entityType)
 	{
-		String entityName = entityType.getName();
+		String entityName = entityType.getFullyQualifiedName();
 		if (!entityName.equals(ID_CARD_BIOBANK) && !entityName.equals(ID_CARD_REGISTRY))
 		{
 			throw new MolgenisDataException(String.format("Not a valid backend for entity [%s]", entityName));
@@ -65,9 +67,10 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	}
 
 	@Override
-	public Iterable<String> getEntityNames()
+	public Iterable<String> getEntityIds()
 	{
-		return repositories.keySet();
+		return dataService.query(ENTITY_TYPE_META_DATA, EntityType.class).eq(BACKEND, NAME)
+				.fetch(getEntityTypeFetch()).findAll().map(EntityType::getId)::iterator;
 	}
 
 	@Override
@@ -79,7 +82,7 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	@Override
 	public Repository<Entity> getRepository(EntityType entityType)
 	{
-		return getRepository(entityType.getName());
+		return getRepository(entityType.getFullyQualifiedName());
 	}
 
 	@Override
@@ -97,12 +100,12 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	@Override
 	public void deleteRepository(EntityType entityType)
 	{
-		repositories.remove(entityType.getName());
+		repositories.remove(entityType.getFullyQualifiedName());
 	}
 
 	@Override
 	public boolean hasRepository(EntityType entityType)
 	{
-		return hasRepository(entityType.getName());
+		return hasRepository(entityType.getFullyQualifiedName());
 	}
 }
