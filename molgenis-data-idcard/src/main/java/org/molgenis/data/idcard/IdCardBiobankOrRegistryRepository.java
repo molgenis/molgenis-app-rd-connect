@@ -6,7 +6,7 @@ import org.molgenis.data.Query;
 import org.molgenis.data.RepositoryCapability;
 import org.molgenis.data.aggregation.AggregateQuery;
 import org.molgenis.data.aggregation.AggregateResult;
-import org.molgenis.data.elasticsearch.ElasticsearchService;
+import org.molgenis.data.elasticsearch.SearchService;
 import org.molgenis.data.support.AbstractRepository;
 
 import java.util.HashSet;
@@ -19,11 +19,11 @@ import static org.molgenis.data.RepositoryCapability.*;
 
 public abstract class IdCardBiobankOrRegistryRepository extends AbstractRepository
 {
-	private final ElasticsearchService elasticsearchService;
+	private final SearchService searchService;
 
-	IdCardBiobankOrRegistryRepository(ElasticsearchService elasticsearchService)
+	IdCardBiobankOrRegistryRepository(SearchService searchService)
 	{
-		this.elasticsearchService = requireNonNull(elasticsearchService);
+		this.searchService = requireNonNull(searchService);
 	}
 
 	@Override
@@ -38,13 +38,13 @@ public abstract class IdCardBiobankOrRegistryRepository extends AbstractReposito
 	@Override
 	public long count(Query<Entity> q)
 	{
-		return elasticsearchService.count(q, getEntityType());
+		return searchService.count(q, getEntityType());
 	}
 
 	@Override
 	public Stream<Entity> findAll(Query<Entity> q)
 	{
-		return elasticsearchService.searchAsStream(q, getEntityType());
+		return searchService.searchAsStream(q, getEntityType());
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public abstract class IdCardBiobankOrRegistryRepository extends AbstractReposito
 	@Override
 	public AggregateResult aggregate(AggregateQuery aggregateQuery)
 	{
-		return elasticsearchService.aggregate(aggregateQuery, getEntityType());
+		return searchService.aggregate(aggregateQuery, getEntityType());
 	}
 
 	@Override
