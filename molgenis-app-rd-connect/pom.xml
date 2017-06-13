@@ -262,11 +262,6 @@
         </dependency>
         <dependency>
             <groupId>org.molgenis</groupId>
-            <artifactId>molgenis-genetics-diag</artifactId>
-            <version>${molgenis.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.molgenis</groupId>
             <artifactId>molgenis-data-i18n</artifactId>
             <version>${molgenis.version}</version>
         </dependency>

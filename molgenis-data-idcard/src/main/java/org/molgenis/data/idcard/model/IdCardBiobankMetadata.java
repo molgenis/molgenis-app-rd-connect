@@ -32,7 +32,7 @@ public class IdCardBiobankMetadata extends SystemEntityType
 		setPackage(idCardPackage);
 		setExtends(idCardBiobankOrRegistryMetadata);
 
-		setBackend(IdCardRepositoryCollection.NAME);
+		setBackend(IdCardRepositoryCollection.ID_CARD);
 		setLabel("Biobank");
 		setDescription("Biobank from ID-Card");
 	}

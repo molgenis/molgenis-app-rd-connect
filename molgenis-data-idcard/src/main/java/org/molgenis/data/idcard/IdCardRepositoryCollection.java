@@ -23,7 +23,7 @@ import static org.molgenis.data.meta.model.EntityTypeMetadata.ENTITY_TYPE_META_D
 @Component
 public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 {
-	public static final String NAME = "ID-Card";
+	public static final String ID_CARD = "ID-Card";
 
 	private final IdCardBiobankRepository idCardBiobankRepository;
 	private final IdCardRegistryRepository idCardRegistryRepository;
@@ -46,7 +46,7 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	@Override
 	public String getName()
 	{
-		return NAME;
+		return ID_CARD;
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	@Override
 	public Repository<Entity> createRepository(EntityType entityType)
 	{
-		String entityName = entityType.getFullyQualifiedName();
+		String entityName = entityType.getId();
 		if (!entityName.equals(ID_CARD_BIOBANK) && !entityName.equals(ID_CARD_REGISTRY))
 		{
 			throw new MolgenisDataException(String.format("Not a valid backend for entity [%s]", entityName));
@@ -67,9 +67,9 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	}
 
 	@Override
-	public Iterable<String> getEntityIds()
+	public Iterable<String> getEntityTypeIds()
 	{
-		return dataService.query(ENTITY_TYPE_META_DATA, EntityType.class).eq(BACKEND, NAME)
+		return dataService.query(ENTITY_TYPE_META_DATA, EntityType.class).eq(BACKEND, ID_CARD)
 				.fetch(getEntityTypeFetch()).findAll().map(EntityType::getId)::iterator;
 	}
 
@@ -82,7 +82,7 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	@Override
 	public Repository<Entity> getRepository(EntityType entityType)
 	{
-		return getRepository(entityType.getFullyQualifiedName());
+		return getRepository(entityType.getId());
 	}
 
 	@Override
@@ -100,12 +100,12 @@ public class IdCardRepositoryCollection extends AbstractRepositoryCollection
 	@Override
 	public void deleteRepository(EntityType entityType)
 	{
-		repositories.remove(entityType.getFullyQualifiedName());
+		repositories.remove(entityType.getId());
 	}
 
 	@Override
 	public boolean hasRepository(EntityType entityType)
 	{
-		return hasRepository(entityType.getFullyQualifiedName());
+		return hasRepository(entityType.getId());
 	}
 }
