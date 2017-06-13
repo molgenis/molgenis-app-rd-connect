@@ -62,6 +62,16 @@
     <dependencies>
         <dependency>
             <groupId>org.molgenis</groupId>
+            <artifactId>molgenis-data-idcard</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.molgenis</groupId>
+            <artifactId>molgenis-apps</artifactId>
+            <version>${molgenis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.molgenis</groupId>
             <artifactId>molgenis-bootstrap</artifactId>
             <version>${molgenis.version}</version>
         </dependency>
@@ -114,11 +124,6 @@
             <groupId>org.molgenis</groupId>
             <artifactId>molgenis-data-csv</artifactId>
             <version>${molgenis.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.molgenis</groupId>
-            <artifactId>molgenis-data-idcard</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.molgenis</groupId>
@@ -279,6 +284,22 @@
             <groupId>org.molgenis</groupId>
             <artifactId>molgenis-settings</artifactId>
             <version>${molgenis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.molgenis</groupId>
+            <artifactId>molgenis-swagger</artifactId>
+            <version>${molgenis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.molgenis</groupId>
+            <artifactId>molgenis-amazon-bucket</artifactId>
+            <version>${molgenis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.molgenis</groupId>
+            <artifactId>molgenis-test</artifactId>
+            <version>${molgenis.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
