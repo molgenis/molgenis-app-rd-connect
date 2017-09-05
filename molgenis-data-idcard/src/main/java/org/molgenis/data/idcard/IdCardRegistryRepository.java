@@ -1,13 +1,13 @@
 package org.molgenis.data.idcard;
 
 import org.molgenis.data.Entity;
-import org.molgenis.data.elasticsearch.ElasticsearchService.IndexingMode;
-import org.molgenis.data.elasticsearch.SearchService;
 import org.molgenis.data.idcard.client.IdCardClient;
 import org.molgenis.data.idcard.model.IdCardRegistry;
 import org.molgenis.data.idcard.model.IdCardRegistryFactory;
 import org.molgenis.data.idcard.model.IdCardRegistryMetadata;
 import org.molgenis.data.idcard.settings.IdCardIndexerSettings;
+import org.molgenis.data.index.IndexService;
+import org.molgenis.data.index.SearchService;
 import org.molgenis.data.meta.model.EntityType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Iterator;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.StreamSupport.stream;
 
 @Repository
 public class IdCardRegistryRepository extends IdCardBiobankOrRegistryRepository
@@ -25,20 +26,20 @@ public class IdCardRegistryRepository extends IdCardBiobankOrRegistryRepository
 
 	private final IdCardRegistryMetadata idCardRegistryMetadata;
 	private final IdCardClient idCardClient;
-	private final SearchService searchService;
+	private final IndexService indexService;
 	private final IdCardIndexerSettings idCardIndexerSettings;
 	private final IdCardRegistryFactory idCardRegistryFactory;
 
 	@Autowired
 	public IdCardRegistryRepository(IdCardRegistryMetadata idCardRegistryMetadata,
-			IdCardRegistryFactory idCardRegistryFactory, IdCardClient idCardClient,
+			IdCardRegistryFactory idCardRegistryFactory, IdCardClient idCardClient, IndexService indexService,
 			SearchService searchService, IdCardIndexerSettings idCardIndexerSettings)
 	{
 		super(searchService);
 		this.idCardRegistryMetadata = requireNonNull(idCardRegistryMetadata);
 		this.idCardRegistryFactory = requireNonNull(idCardRegistryFactory);
 		this.idCardClient = requireNonNull(idCardClient);
-		this.searchService = requireNonNull(searchService);
+		this.indexService = requireNonNull(indexService);
 		this.idCardIndexerSettings = requireNonNull(idCardIndexerSettings);
 	}
 
@@ -71,15 +72,15 @@ public class IdCardRegistryRepository extends IdCardBiobankOrRegistryRepository
 	public void rebuildIndex()
 	{
 		LOG.trace("Indexing ID-Card biobanks ...");
-		Iterable<? extends Entity> entities = idCardClient
-				.getIdCardRegistries(idCardIndexerSettings.getIndexRebuildTimeout());
+		Iterable<? extends Entity> entities = idCardClient.getIdCardRegistries(
+				idCardIndexerSettings.getIndexRebuildTimeout());
 
 		EntityType entityType = getEntityType();
-		if (!searchService.hasMapping(entityType))
+		if (!indexService.hasIndex(entityType))
 		{
-			searchService.createMappings(entityType);
+			indexService.createIndex(entityType);
 		}
-		searchService.index(entities, entityType, IndexingMode.UPDATE);
+		indexService.index(entityType, stream(entities.spliterator(), false));
 		LOG.debug("Indexed ID-Card biobanks");
 	}
 

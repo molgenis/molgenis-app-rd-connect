@@ -4,9 +4,11 @@
     <parent>
         <groupId>org.molgenis</groupId>
         <artifactId>molgenis-rd-connect</artifactId>
-        <version>4.2.0-RD-CONNECT-SNAPSHOT</version>
+        <version>5.1.0-RD-CONNECT-SNAPSHOT</version>
     </parent>
     <artifactId>molgenis-data-idcard</artifactId>
+
+    <name>data-idcard</name>
 
     <build>
         <plugins>
@@ -21,6 +23,11 @@
     <dependencies>
         <dependency>
             <groupId>org.molgenis</groupId>
+            <artifactId>molgenis-core</artifactId>
+            <version>${molgenis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.molgenis</groupId>
             <artifactId>molgenis-data</artifactId>
             <version>${molgenis.version}</version>
         </dependency>
@@ -31,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>org.molgenis</groupId>
-            <artifactId>molgenis-core-ui</artifactId>
+            <artifactId>molgenis-web</artifactId>
             <version>${molgenis.version}</version>
         </dependency>
     </dependencies>

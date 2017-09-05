@@ -6,19 +6,22 @@ import org.molgenis.data.Query;
 import org.molgenis.data.RepositoryCapability;
 import org.molgenis.data.aggregation.AggregateQuery;
 import org.molgenis.data.aggregation.AggregateResult;
-import org.molgenis.data.elasticsearch.SearchService;
+import org.molgenis.data.index.SearchService;
 import org.molgenis.data.support.AbstractRepository;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.EnumSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
-import static org.molgenis.data.RepositoryCapability.*;
+import static org.molgenis.data.RepositoryCapability.WRITABLE;
 
 public abstract class IdCardBiobankOrRegistryRepository extends AbstractRepository
 {
+	private static final Set<RepositoryCapability> REPOSITORY_CAPABILITIES = unmodifiableSet(
+			EnumSet.of(RepositoryCapability.AGGREGATEABLE, RepositoryCapability.QUERYABLE));
+
 	private final SearchService searchService;
 
 	IdCardBiobankOrRegistryRepository(SearchService searchService)
@@ -29,29 +32,27 @@ public abstract class IdCardBiobankOrRegistryRepository extends AbstractReposito
 	@Override
 	public Set<RepositoryCapability> getCapabilities()
 	{
-		Set<RepositoryCapability> repoCapabilities = new HashSet<>();
-		repoCapabilities.add(AGGREGATEABLE);
-		repoCapabilities.add(QUERYABLE);
-		return repoCapabilities;
+		return REPOSITORY_CAPABILITIES;
 	}
 
 	@Override
 	public long count(Query<Entity> q)
 	{
-		return searchService.count(q, getEntityType());
+		return searchService.count(getEntityType(), q);
 	}
 
 	@Override
 	public Stream<Entity> findAll(Query<Entity> q)
 	{
-		return searchService.searchAsStream(q, getEntityType());
+		Stream<Object> entityIds = searchService.search(getEntityType(), q);
+		return entityIds.map(this::findOneById);
 	}
 
 	@Override
 	public Entity findOne(Query<Entity> q)
 	{
-		Iterator<Entity> it = findAll(q).iterator();
-		return it.hasNext() ? it.next() : null;
+		Object entityId = searchService.searchOne(getEntityType(), q);
+		return findOneById(entityId);
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public abstract class IdCardBiobankOrRegistryRepository extends AbstractReposito
 	@Override
 	public AggregateResult aggregate(AggregateQuery aggregateQuery)
 	{
-		return searchService.aggregate(aggregateQuery, getEntityType());
+		return searchService.aggregate(getEntityType(), aggregateQuery);
 	}
 
 	@Override
