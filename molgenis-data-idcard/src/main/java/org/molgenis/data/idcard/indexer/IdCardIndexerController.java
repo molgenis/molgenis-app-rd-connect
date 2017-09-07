@@ -1,8 +1,8 @@
 package org.molgenis.data.idcard.indexer;
 
-import org.molgenis.ui.MolgenisPluginController;
 import org.molgenis.util.ErrorMessageResponse;
 import org.molgenis.util.ErrorMessageResponse.ErrorMessage;
+import org.molgenis.web.PluginController;
 import org.quartz.Trigger.TriggerState;
 import org.quartz.TriggerKey;
 import org.slf4j.Logger;
@@ -20,12 +20,12 @@ import static org.molgenis.data.idcard.model.IdCardBiobankMetadata.ID_CARD_BIOBA
 
 @Controller
 @RequestMapping(URI)
-public class IdCardIndexerController extends MolgenisPluginController
+public class IdCardIndexerController extends PluginController
 {
 	private static final Logger LOG = LoggerFactory.getLogger(IdCardIndexerController.class);
 
 	public static final String ID = "idcardindexer";
-	public static final String URI = MolgenisPluginController.PLUGIN_URI_PREFIX + ID;
+	public static final String URI = PluginController.PLUGIN_URI_PREFIX + ID;
 
 	private final IdCardIndexerService idCardIndexerService;
 

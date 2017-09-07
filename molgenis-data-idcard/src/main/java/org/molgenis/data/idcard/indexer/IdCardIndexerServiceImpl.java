@@ -6,7 +6,7 @@ import org.molgenis.data.idcard.model.IdCardIndexingEvent;
 import org.molgenis.data.idcard.model.IdCardIndexingEventFactory;
 import org.molgenis.data.idcard.model.IdCardIndexingEventStatus;
 import org.molgenis.data.idcard.settings.IdCardIndexerSettings;
-import org.molgenis.security.core.runas.RunAsSystemProxy;
+import org.molgenis.security.core.runas.RunAsSystemAspect;
 import org.molgenis.security.core.utils.SecurityUtils;
 import org.quartz.*;
 import org.quartz.Trigger.TriggerState;
@@ -213,9 +213,6 @@ public class IdCardIndexerServiceImpl implements IdCardIndexerService, Disposabl
 		IdCardIndexingEvent idCardIndexingEvent = idCardIndexingEventFactory.create();
 		idCardIndexingEvent.setStatus(IdCardIndexingEventStatus.CONFIGURATION_CHANGE);
 		idCardIndexingEvent.setMessage(updateMessage);
-		RunAsSystemProxy.runAsSystem(() ->
-		{
-			dataService.add(ID_CARD_INDEXING_EVENT, idCardIndexingEvent);
-		});
+		RunAsSystemAspect.runAsSystem(() -> dataService.add(ID_CARD_INDEXING_EVENT, idCardIndexingEvent));
 	}
 }

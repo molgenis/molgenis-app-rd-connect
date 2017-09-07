@@ -7,7 +7,7 @@ import org.molgenis.data.idcard.model.IdCardIndexingEvent;
 import org.molgenis.data.idcard.model.IdCardIndexingEventFactory;
 import org.molgenis.data.idcard.model.IdCardIndexingEventStatus;
 import org.molgenis.data.idcard.settings.IdCardIndexerSettings;
-import org.molgenis.security.core.runas.RunAsSystemProxy;
+import org.molgenis.security.core.runas.RunAsSystemAspect;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -69,7 +69,7 @@ public class IdCardIndexerJob implements Job
 		RuntimeException runtimeException = null;
 		try
 		{
-			RunAsSystemProxy.runAsSystem(() ->
+			RunAsSystemAspect.runAsSystem(() ->
 			{
 				idCardBiobankRepository.rebuildIndex();
 				idCardRegistryRepository.rebuildIndex();
@@ -85,7 +85,7 @@ public class IdCardIndexerJob implements Job
 			runtimeException = e;
 		}
 
-		RunAsSystemProxy.runAsSystem(() -> dataService.add(ID_CARD_INDEXING_EVENT, idCardIndexingEvent));
+		RunAsSystemAspect.runAsSystem(() -> dataService.add(ID_CARD_INDEXING_EVENT, idCardIndexingEvent));
 
 		if (idCardIndexingEvent.getStatus() == IdCardIndexingEventStatus.FAILED)
 		{
